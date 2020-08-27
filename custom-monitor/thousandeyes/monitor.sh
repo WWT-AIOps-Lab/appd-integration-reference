@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 # 
 # NOTE: The `Test` and `Account Group` are defined in `config.json`
 # 

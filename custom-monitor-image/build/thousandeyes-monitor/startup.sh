@@ -1,13 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env sh
 GREEN='\033[92m'
 BLUE='\033[96m'
 YELLOW='\033[93m'
 GREY='\033[37m'
 CLEAR='\033[90m'
 
+# Shim in log level for log4j.xml
+
+# Shim in logging to stdout for log4j.xml
+
 # Sample Docker start script for the AppDynamics Standalone Machine Agent
 # See the AppDynamics Product Docs (Standalone Machine Agent Configuration Reference)
 # Environment variables are passed to the container at runtime
+
+$MACHINE_AGENT_HOME/updateAnalyticsAgent.sh $MACHINE_AGENT_HOME
 
 # Default the unique host id to thousandeyes-<appname>
 if [ "x${APPDYNAMICS_AGENT_UNIQUE_HOST_ID}" == "x" ]; then
@@ -82,6 +88,6 @@ printf " - Custom Metric Format:  ${YELLOW}${TE_METRIC_TEMPLATE}${CLEAR}\n"
 
 
 # Start Machine Agent
-${MACHINE_AGENT_HOME}/bin/machine-agent ${MA_PROPERTIES}
+java ${MA_PROPERTIES} -jar ${MACHINE_AGENT_HOME}/machineagent.jar
 
 

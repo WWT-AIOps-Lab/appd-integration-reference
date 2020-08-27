@@ -13,8 +13,7 @@ fi
 if [[ $DISTRO == *"centos"* ]]; then
 	yum update -y && \
 	yum install curl python3 python3-pip vim -y && \
-	pip3 install requests && \
-	pip3 install unidecode
+	pip3 install requests unidecode
 else
 	export DEBIAN_FRONTEND=noninteractive
 
@@ -24,6 +23,5 @@ else
 	apt-get install -y python3-pip --no-install-recommends && \
 	apt-get install -y vim --no-install-recommends && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* && \
-	pip3 install requests && \
-	pip3 install unidecode
+	pip3 install requests unidecode
 fi

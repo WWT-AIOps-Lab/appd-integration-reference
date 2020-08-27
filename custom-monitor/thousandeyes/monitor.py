@@ -208,33 +208,36 @@ def query_latest_data (username, authtoken, accountname, testname, window_second
         for agentdata in testDetails['agents']:
             testdata = teApi.getTestPageloadData(test['testId'])
             if testdata :
-                update_aggregated_metrics (aggdata, testdata['web']['pageLoad'], testDetails, appinfo)
-                try:
-                    while testdata['pages']['next']:
-                        testdata = TeApi(username, authtoken).getFullUrl(testdata['pages']['next'])
-                        if testdata : update_aggregated_metrics (aggdata, testdata['web']['pageLoad'], testDetails, appinfo)
-                except:
-                    pass
+                if 'web' in testdata.keys():
+                    update_aggregated_metrics (aggdata, testdata['web']['pageLoad'], testDetails, appinfo)
+                    try:
+                        while testdata['pages']['next']:
+                            testdata = TeApi(username, authtoken).getFullUrl(testdata['pages']['next'])
+                            if testdata : update_aggregated_metrics (aggdata, testdata['web']['pageLoad'], testDetails, appinfo)
+                    except:
+                        pass
 
             httpdata = teApi.getTestHttpData(test['testId'])
             if httpdata :
-                update_aggregated_metrics (aggdata, httpdata['web']['httpServer'], testDetails, appinfo)
-                try:
-                    while httpdata['pages']['next']:
-                        httpdata = TeApi(username, authtoken).getFullUrl(httpdata['pages']['next'])
-                        if httpdata : update_aggregated_metrics (aggdata, httpdata['web']['httpServer'], testDetails, appinfo)
-                except:
-                    pass
+                if 'web' in httpdata.keys():
+                    update_aggregated_metrics (aggdata, httpdata['web']['httpServer'], testDetails, appinfo)
+                    try:
+                        while httpdata['pages']['next']:
+                            httpdata = TeApi(username, authtoken).getFullUrl(httpdata['pages']['next'])
+                            if httpdata : update_aggregated_metrics (aggdata, httpdata['web']['httpServer'], testDetails, appinfo)
+                    except:
+                        pass
 
             networkdata = teApi.getTestNetData(test['testId'])
             if networkdata:
-                update_aggregated_metrics (aggdata, networkdata['net']['metrics'], testDetails, appinfo)
-                try:
-                    while networkdata['pages']['next']:
-                        networkdata = TeApi(username, authtoken).getFullUrl(networkdata['pages']['next'])
-                        if networkdata : update_aggregated_metrics (aggdata, networkdata['net']['metrics'], testDetails, appinfo)
-                except:
-                    pass
+                if 'net' in networkdata.keys():
+                    update_aggregated_metrics (aggdata, networkdata['net']['metrics'], testDetails, appinfo)
+                    try:
+                        while networkdata['pages']['next']:
+                            networkdata = TeApi(username, authtoken).getFullUrl(networkdata['pages']['next'])
+                            if networkdata : update_aggregated_metrics (aggdata, networkdata['net']['metrics'], testDetails, appinfo)
+                    except:
+                        pass
 
             else :
                 print (json.dumps({"error": "Test " + testname + " (" + test['type'] + ") is not a Pageload, HTTP, or Network test"}))
