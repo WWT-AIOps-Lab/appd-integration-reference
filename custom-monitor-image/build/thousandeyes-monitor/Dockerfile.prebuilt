@@ -5,6 +5,9 @@ ENV MACHINE_AGENT_HOME /opt/appdynamics
 COPY startup.sh ${MACHINE_AGENT_HOME}
 RUN chmod 744 ${MACHINE_AGENT_HOME}/startup.sh
 
+# Copy log4j.xml
+COPY log4j.xml ${MACHINE_AGENT_HOME}/conf/logging/log4j.xml
+
 # Download the ThousandEyes Monitor code
 # RUN wget https://github.com/thousandeyes/appd-integration-reference/archive/master.tar.gz && \
 # 		tar -xzvf master.tar.gz && \

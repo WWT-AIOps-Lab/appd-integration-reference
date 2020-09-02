@@ -1,19 +1,15 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 GREEN='\033[92m'
 BLUE='\033[96m'
 YELLOW='\033[93m'
 GREY='\033[37m'
 CLEAR='\033[90m'
 
-# Shim in log level for log4j.xml
-
-# Shim in logging to stdout for log4j.xml
-
 # Sample Docker start script for the AppDynamics Standalone Machine Agent
 # See the AppDynamics Product Docs (Standalone Machine Agent Configuration Reference)
 # Environment variables are passed to the container at runtime
 
-$MACHINE_AGENT_HOME/updateAnalyticsAgent.sh $MACHINE_AGENT_HOME
+# $MACHINE_AGENT_HOME/updateAnalyticsAgent.sh $MACHINE_AGENT_HOME
 
 # Default the unique host id to thousandeyes-<appname>
 if [ "x${APPDYNAMICS_AGENT_UNIQUE_HOST_ID}" == "x" ]; then
@@ -75,6 +71,26 @@ fi
 if [ "x${APPDYNAMICS_AGENT_METRIC_LIMIT}" != "x" ]; then
   MA_PROPERTIES+=" -Dappdynamics.agent.maxMetrics=${APPDYNAMICS_AGENT_METRIC_LIMIT}"
 fi
+
+# Taking the approach of using system properties to set logging levels.
+SINGULARITY_LOG_LEVEL="info"
+if [ "x${SINGULARITY_LOGGING_LEVEL}" != "x" ]; then
+  SINGULARITY_LOG_LEVEL="${SINGULARITY_LOGGING_LEVEL}"
+fi
+
+APPD_LOG_LEVEL="info"
+if [ "x${APPDYNAMICS_LOGGING_LEVEL}" != "x" ]; then
+  APPD_LOG_LEVEL="${APPDYNAMICS_LOGGING_LEVEL}"
+fi
+
+SIGAR_LOG_LEVEL="info"
+if [ "x${SIGAR_LOGGING_LEVEL}" != "x" ]; then
+  SIGAR_LOG_LEVEL="${SIGAR_LOGGING_LEVEL}"
+fi
+
+MA_PROPERTIES+=" -Dsingularity.logging.level=${SINGULARITY_LOG_LEVEL} -Dappdynamics.logging.level=${APPD_LOG_LEVEL} -Dsigar.logging.level=${SIGAR_LOG_LEVEL}"
+
+
 
 echo "\nMA_PROPERTIES: ${MA_PROPERTIES}\n"
 
