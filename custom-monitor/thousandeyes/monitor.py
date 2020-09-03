@@ -152,6 +152,7 @@ def print_custom_metrics (testround, metrics, metric_template):
             agent = unidecode(testround['agentName'].replace(',', ' '))
             metricname = metrics[metric]
             metricvalue = testround[metric]
+            testName = testround['testName']
             metric_count_key=str(testround['roundId'])+"-"+agent
             AGENT_METRIC_COUNT_PER_TESTROUND[metric_count_key]=AGENT_METRIC_COUNT_PER_TESTROUND[metric_count_key]+1 if metric_count_key in AGENT_METRIC_COUNT_PER_TESTROUND else 1
                         
@@ -208,7 +209,7 @@ def query_latest_data (username, authtoken, accountname, testname, window_second
         for agentdata in testDetails['agents']:
             testdata = teApi.getTestPageloadData(test['testId'])
             if testdata :
-                if 'web' in testdata.keys():
+                if 'web' in testdata.keys() and 'pageLoad' in testdata['web'].keys():
                     update_aggregated_metrics (aggdata, testdata['web']['pageLoad'], testDetails, appinfo)
                     try:
                         while testdata['pages']['next']:
@@ -219,7 +220,7 @@ def query_latest_data (username, authtoken, accountname, testname, window_second
 
             httpdata = teApi.getTestHttpData(test['testId'])
             if httpdata :
-                if 'web' in httpdata.keys():
+                if 'web' in httpdata.keys() and 'httpServer' in httpdata['web'].keys():
                     update_aggregated_metrics (aggdata, httpdata['web']['httpServer'], testDetails, appinfo)
                     try:
                         while httpdata['pages']['next']:
@@ -230,7 +231,7 @@ def query_latest_data (username, authtoken, accountname, testname, window_second
 
             networkdata = teApi.getTestNetData(test['testId'])
             if networkdata:
-                if 'net' in networkdata.keys():
+                if 'net' in networkdata.keys() and 'metrics' in networkdata['net'].keys():
                     update_aggregated_metrics (aggdata, networkdata['net']['metrics'], testDetails, appinfo)
                     try:
                         while networkdata['pages']['next']:
