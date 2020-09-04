@@ -1,0 +1,28 @@
+FROM appdynamics/machine-agent-analytics:latest
+
+ENV MACHINE_AGENT_HOME /opt/appdynamics
+
+COPY startup.sh ${MACHINE_AGENT_HOME}
+RUN chmod 744 ${MACHINE_AGENT_HOME}/startup.sh
+
+# Copy log4j.xml
+COPY log4j.xml ${MACHINE_AGENT_HOME}/conf/logging/log4j.xml
+
+# Download the ThousandEyes Monitor code
+# RUN wget https://github.com/thousandeyes/appd-integration-reference/archive/master.tar.gz && \
+# 		tar -xzvf master.tar.gz && \
+# 		mv appd-integration-reference-master/custom-monitor/thousandeyes ${MACHINE_AGENT_HOME}/monitors && \
+# 		rm -rf appd-integration-reference-master
+
+# If building locally you can copy rather than pulling from GitHub:
+COPY thousandeyes ${MACHINE_AGENT_HOME}/monitors/thousandeyes
+
+# Install ThousandEyes Monitor
+RUN chmod +x ${MACHINE_AGENT_HOME}/monitors/thousandeyes/install.sh && \
+		${MACHINE_AGENT_HOME}/monitors/thousandeyes/install.sh
+
+RUN chmod +x ${MACHINE_AGENT_HOME}/monitors/thousandeyes/monitor.sh
+RUN chmod +x ${MACHINE_AGENT_HOME}/monitors/thousandeyes/monitor.py		
+
+CMD "${MACHINE_AGENT_HOME}/startup.sh"
+

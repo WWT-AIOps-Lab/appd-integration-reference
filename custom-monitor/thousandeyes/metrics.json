@@ -9,7 +9,7 @@
     "totalTime": "Total Time",
     "totalSize": "Total Size", 
     "responseCode": "Response Code",
-    "numRedirects": "Redirectes",
+    "numRedirects": "Redirects",
     "wireSize": "Wire Size",
     "avgLatency": "Avg Latency",
     "maxLatency": "Max Latency",
